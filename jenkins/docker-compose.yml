@@ -1,0 +1,30 @@
+version: '2'
+services:
+
+  jenkins:
+    build:
+      context: .
+    restart: always
+    networks:
+      - jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins-data:/var/jenkins_home
+
+  wildfly:
+    build:
+      context: wildfly/.
+    restart: always
+    networks:
+      - jenkins
+
+volumes:
+  jenkins-data:
+    external: false
+
+networks:
+  jenkins:
+    driver: bridge
